@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "PermissionRequest": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -Command \"[console]::Beep(1000, 1000); [System.Threading.Thread]::Sleep(100); [console]::Beep(1200, 1000); [System.Threading.Thread]::Sleep(100); [console]::Beep(1400, 1000)\"",
+            "statusMessage": "🔔🔔🔔 Alerta sonora - 3 pitidos"
+          }
+        ]
+      }
+    ]
+  }
+}
