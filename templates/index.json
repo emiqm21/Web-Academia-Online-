@@ -1,66 +1,116 @@
-/*
- * HOMEPAGE - Ebook Sales Funnel
- * Estructura persuasiva para venta de ebook con FOMO, escasez y testimonios
- */
 {
   "sections": {
-    "hero_ebook": {
-      "type": "hero-ebook-persuasivo",
-      "name": "Hero - Ebook Persuasivo",
+    "hero": {
+      "type": "ebook-hero-premium",
       "settings": {
-        "heading": "Recupera a Tu Ex Pareja",
-        "subheading": "Una guía basada en psicología para entender la ruptura y aplicar estrategias prácticas de reconexión.",
-        "edition_badge": "Segunda Edición Mejorada",
-        "guarantee_text": "Garantía de 30 días. Dinero de vuelta si no te convence.",
-        "cta_text": "Acceder Ahora",
-        "cta_link": "shopify://products/como-recuperar-a-tu-ex-pareja-sin-perder-tu-dignidad"
+        "title": "Descubre Historias que Transforman",
+        "subtitle": "Millones de lectores encuentran sus próximas lecturas favoritas aquí",
+        "show_search": true,
+        "categories_badge": true,
+        "cta_text": "Explorar Catálogo",
+        "cta_link": "#catalog"
       }
     },
-    "autor_badge": {
-      "type": "autor-badge",
-      "name": "Autor - Badge",
+    "categories": {
+      "type": "ebook-categories-filter",
       "settings": {
-        "author_name": "Santiago Reyes",
-        "author_title": "Psicólogo Clínico especializado en Dinámicas de Pareja",
-        "author_bio": "7+ años acompañando personas en ruptura y reconexión. He trabajado con miles de personas en transiciones relacionales, aplicando principios de psicología comprobados.",
-        "author_credentials": "Licenciatura en Psicología - Universidad Nacional,Especialización en Teoría del Apego,Certificación en Comunicación No Violenta,Formación en Psicología Cognitiva"
+        "title": "Busca por Género",
+        "show_count": true,
+        "categories": [
+          {
+            "name": "Romance",
+            "emoji": "💕",
+            "count": 2841
+          },
+          {
+            "name": "Thriller",
+            "emoji": "🔥",
+            "count": 1956
+          },
+          {
+            "name": "Drama",
+            "emoji": "🎭",
+            "count": 1542
+          },
+          {
+            "name": "Ciencia Ficción",
+            "emoji": "🚀",
+            "count": 1203
+          },
+          {
+            "name": "Fantasía",
+            "emoji": "⚔️",
+            "count": 1687
+          },
+          {
+            "name": "Misterio",
+            "emoji": "🔍",
+            "count": 1124
+          },
+          {
+            "name": "Desarrollo Personal",
+            "emoji": "📈",
+            "count": 892
+          },
+          {
+            "name": "Humor",
+            "emoji": "😂",
+            "count": 756
+          }
+        ]
       }
     },
-    "testimonios": {
-      "type": "testimonios-reconexion",
-      "name": "Testimonios - Reconexión",
+    "trending": {
+      "type": "ebook-trending",
       "settings": {
-        "heading": "Historias de Gente que lo Logró",
-        "subheading": "Estos son resultados reales de personas que aplicaron los principios de la primera edición"
+        "title": "Trending Ahora",
+        "subtitle": "Historias que todos están leyendo esta semana",
+        "show_rating": true,
+        "show_author": true,
+        "items_to_show": 5
       }
     },
-    "escasez": {
-      "type": "escasez-contador",
-      "name": "Escasez - Contador",
+    "catalog": {
+      "type": "ebook-catalog-grid",
       "settings": {
-        "heading": "Precio de Lanzamiento",
-        "original_price": 34990,
-        "launch_price": 17495,
-        "discount_percentage": 50,
-        "copies_total": 100,
-        "copies_remaining": 10,
-        "days_remaining": 7
+        "title": "Catálogo Completo",
+        "subtitle": "Explora nuestras +8000 historias",
+        "show_filters": true,
+        "show_search": true,
+        "columns_desktop": 3,
+        "columns_tablet": 2,
+        "columns_mobile": 1,
+        "items_per_page": 12,
+        "show_rating": true,
+        "show_author": true
       }
     },
-    "faq": {
-      "type": "faq-ebook",
-      "name": "FAQ - Ebook",
+    "testimonials": {
+      "type": "ebook-testimonials-modern",
       "settings": {
-        "heading": "Preguntas Frecuentes",
-        "subheading": "Aclaramos lo más importante antes de que compres"
+        "title": "Lo Que Dicen Nuestros Lectores",
+        "subtitle": "Historias reales de personas que encontraron su próxima obsesión literaria",
+        "show_rating": true,
+        "background_color": "light"
+      }
+    },
+    "authors": {
+      "type": "ebook-author-spotlight",
+      "settings": {
+        "title": "Autores Destacados",
+        "subtitle": "Descubre a los creadores de tus historias favoritas",
+        "show_bio": true,
+        "show_work_count": true,
+        "cta_text": "Ver Todas las Obras"
       }
     }
   },
   "order": [
-    "hero_ebook",
-    "autor_badge",
-    "testimonios",
-    "escasez",
-    "faq"
+    "hero",
+    "categories",
+    "trending",
+    "catalog",
+    "testimonials",
+    "authors"
   ]
 }

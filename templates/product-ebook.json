@@ -1,0 +1,67 @@
+/*
+ * PRODUCT PAGE - Ebook Sales Funnel
+ * Estructura persuasiva para venta individual de ebook
+ * Usa este template para páginas de detalle de productos específicos
+ */
+{
+  "sections": {
+    "hero_ebook": {
+      "type": "hero-ebook-persuasivo",
+      "name": "Hero - Ebook Persuasivo",
+      "settings": {
+        "heading": "Recupera a Tu Ex Pareja",
+        "subheading": "Una guía basada en psicología para entender la ruptura y aplicar estrategias prácticas de reconexión.",
+        "edition_badge": "Segunda Edición Mejorada",
+        "guarantee_text": "Garantía de 30 días. Dinero de vuelta si no te convence.",
+        "cta_text": "Acceder Ahora",
+        "cta_link": "shopify://products/como-recuperar-a-tu-ex-pareja-sin-perder-tu-dignidad"
+      }
+    },
+    "autor_badge": {
+      "type": "autor-badge",
+      "name": "Autor - Badge",
+      "settings": {
+        "author_name": "Santiago Reyes",
+        "author_title": "Psicólogo Clínico especializado en Dinámicas de Pareja",
+        "author_bio": "7+ años acompañando personas en ruptura y reconexión. He trabajado con miles de personas en transiciones relacionales, aplicando principios de psicología comprobados.",
+        "author_credentials": "Licenciatura en Psicología - Universidad Nacional,Especialización en Teoría del Apego,Certificación en Comunicación No Violenta,Formación en Psicología Cognitiva"
+      }
+    },
+    "testimonios": {
+      "type": "testimonios-reconexion",
+      "name": "Testimonios - Reconexión",
+      "settings": {
+        "heading": "Historias de Gente que lo Logró",
+        "subheading": "Estos son resultados reales de personas que aplicaron los principios de la primera edición"
+      }
+    },
+    "escasez": {
+      "type": "escasez-contador",
+      "name": "Escasez - Contador",
+      "settings": {
+        "heading": "Precio de Lanzamiento",
+        "original_price": 34990,
+        "launch_price": 17495,
+        "discount_percentage": 50,
+        "copies_total": 100,
+        "copies_remaining": 10,
+        "days_remaining": 7
+      }
+    },
+    "faq": {
+      "type": "faq-ebook",
+      "name": "FAQ - Ebook",
+      "settings": {
+        "heading": "Preguntas Frecuentes",
+        "subheading": "Aclaramos lo más importante antes de que compres"
+      }
+    }
+  },
+  "order": [
+    "hero_ebook",
+    "autor_badge",
+    "testimonios",
+    "escasez",
+    "faq"
+  ]
+}
