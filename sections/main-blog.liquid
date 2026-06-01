@@ -1,225 +1,142 @@
+{{ 'component-article-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'section-main-blog.css' | asset_url | stylesheet_tag }}
 
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
 
-<script
-  src="{{ 'blog-posts-list.js' | asset_url }}"
-  type="module"
-  fetchpriority="low"
-></script>
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
 
-<blog-posts-list section-id="{{ section.id }}">
-  <div class="section-background color-{{ section.settings.color_scheme }}"></div>
-  <div
-    class="
-      section
-      color-{{ section.settings.color_scheme }}
-      blog-posts
-      spacing-style
-      size-style
-    "
-    data-testid="blog-posts"
-    style="{% render 'spacing-style', settings: section.settings %}"
-  >
-    {% content_for 'blocks' %}
+{%- paginate blog.articles by 6 -%}
+  <div class="main-blog page-width section-{{ section.id }}-padding">
+    <h1 class="title--primary{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
+      {{ blog.title | escape }}
+    </h1>
 
-    <div
-      ref="grid"
-      class="blog-posts-container"
-    >
-      {% liquid
-        assign items_on_page = blog.articles.size
-      %}
-      {% for article in blog.articles %}
-        {% liquid
-          # Defaults for compact layout
-          assign col_span = 2
-          assign scale = 0.6
-          assign is_horizontal = false
-
-          case items_on_page
-            when 1
-              # Single post: full width hero
-              assign col_span = 6
-              assign scale = 1
-              assign is_horizontal = true
-            when 2
-              # Two posts: both standard side by side
-              assign col_span = 3
-              assign scale = 0.8
-            when 3
-              # Three posts: hero + 2 standard
-              if forloop.index == 1
-                assign col_span = 6
-                assign scale = 1
-                assign is_horizontal = true
-              else
-                assign col_span = 3
-                assign scale = 0.8
-              endif
-            when 4
-              # Four posts: all standard in 2x2 grid
-              assign col_span = 3
-              assign scale = 0.8
-            when 5
-              # Five posts: hero + 4 standard
-              if forloop.index == 1
-                assign col_span = 6
-                assign scale = 1
-                assign is_horizontal = true
-              else
-                assign col_span = 3
-                assign scale = 0.8
-              endif
-            else
-              # 6+ posts: hero, 2 standard, rest compact
-              if forloop.index == 1
-                assign col_span = 6
-                assign scale = 1
-                assign is_horizontal = true
-              elsif forloop.index <= 3
-                assign col_span = 3
-                assign scale = 0.8
-              else
-                assign col_span = 2
-                assign scale = 0.6
-              endif
-          endcase
-        %}
-        {% style %}
-          [data-blog-index="{{ section.id }}-{{ forloop.index }}"] {
-            --col-span: {{ col_span }};
-            --blog-post-card-scale: {{ scale }};
-          }
-
-          @media screen and (max-width: 749px) {
-            [data-blog-index="{{ section.id }}-{{ forloop.index }}"] {
-              --col-span: 6;
-              --blog-post-card-scale: 0.5;
-            }
-          }
-        {% endstyle %}
+    <div class="blog-articles {% if section.settings.layout == 'collage' %}blog-articles--collage{% endif %}">
+      {%- for article in blog.articles -%}
         <div
-          class="blog-post-item{% if is_horizontal %} blog-post-item--horizontal{% endif %}"
-          data-testid="blog-post-item"
-          data-blog-index="{{ section.id }}-{{ forloop.index }}"
+          class="blog-articles__article article{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+          {% if settings.animations_reveal_on_scroll %}
+            data-cascade
+            style="--animation-order: {{ forloop.index }};"
+          {% endif %}
         >
-          {% content_for 'block', id: 'static-blog-post-card', type: '_blog-post-card', article: article %}
+          {%- render 'article-card',
+            article: article,
+            media_height: section.settings.image_height,
+            media_aspect_ratio: article.image.aspect_ratio,
+            show_image: section.settings.show_image,
+            show_date: section.settings.show_date,
+            show_author: section.settings.show_author,
+            show_excerpt: true
+          -%}
         </div>
-      {% endfor %}
+      {%- endfor -%}
     </div>
+
+    {%- if paginate.pages > 1 -%}
+      {%- render 'pagination', paginate: paginate -%}
+    {%- endif -%}
   </div>
-</blog-posts-list>
-
-{% stylesheet %}
-  /**
-   * Blog posts page layout
-   */
-  .blog-posts {
-    --page-content-width: var(--narrow-page-width);
-    --page-width: calc(var(--page-content-width) + (var(--page-margin) * 2));
-    --columns-gap: 36px;
-    --rows-gap: 36px;
-  }
-
-  .blog-posts-container {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 1rem;
-    width: 100%;
-    column-gap: var(--columns-gap);
-    row-gap: var(--rows-gap);
-  }
-
-  /**
-   * Blog post item grid positioning and scaling.
-   * Layout is calculated in Liquid based on total article count.
-   * Mobile overrides are applied per-item in inline styles for proper specificity.
-   */
-  .blog-post-item {
-    grid-column: span var(--col-span);
-  }
-
-  /**
-   * When there's no image, the blog post item has a border.
-   */
-  .blog-post-item {
-    border: 1px solid rgb(var(--color-foreground-rgb) / var(--opacity-20));
-    padding: 0 1rem 1rem;
-  }
-
-  .blog-post-item:has(.blog-post-card__image-container) {
-    border: none;
-    padding: 0;
-  }
-{% endstylesheet %}
+{%- endpaginate -%}
 
 {% schema %}
 {
-  "name": "t:names.blog_posts",
-  "blocks": [
-    {
-      "type": "@theme"
-    },
-    {
-      "type": "@app"
-    },
-    {
-      "type": "text"
-    },
-    {
-      "type": "icon"
-    },
-    {
-      "type": "image"
-    },
-    {
-      "type": "button"
-    },
-    {
-      "type": "video"
-    },
-    {
-      "type": "group"
-    },
-    {
-      "type": "spacer"
-    },
-    {
-      "type": "_divider"
-    }
-  ],
-  "disabled_on": {
-    "groups": ["header"]
-  },
+  "name": "t:sections.main-blog.name",
+  "tag": "section",
+  "class": "section",
   "settings": [
     {
-      "type": "color_scheme",
-      "id": "color_scheme",
-      "label": "t:settings.color_scheme",
-      "default": "scheme-1"
+      "type": "select",
+      "id": "layout",
+      "options": [
+        {
+          "value": "grid",
+          "label": "t:sections.main-blog.settings.layout.options__1.label"
+        },
+        {
+          "value": "collage",
+          "label": "t:sections.main-blog.settings.layout.options__2.label"
+        }
+      ],
+      "default": "collage",
+      "label": "t:sections.main-blog.settings.layout.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_image",
+      "default": true,
+      "label": "t:sections.main-blog.settings.show_image.label"
+    },
+    {
+      "type": "select",
+      "id": "image_height",
+      "options": [
+        {
+          "value": "adapt",
+          "label": "t:sections.main-blog.settings.image_height.options__1.label"
+        },
+        {
+          "value": "small",
+          "label": "t:sections.main-blog.settings.image_height.options__2.label"
+        },
+        {
+          "value": "medium",
+          "label": "t:sections.main-blog.settings.image_height.options__3.label"
+        },
+        {
+          "value": "large",
+          "label": "t:sections.main-blog.settings.image_height.options__4.label"
+        }
+      ],
+      "default": "medium",
+      "label": "t:sections.main-blog.settings.image_height.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_date",
+      "default": true,
+      "label": "t:sections.main-blog.settings.show_date.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_author",
+      "default": false,
+      "label": "t:sections.main-blog.settings.show_author.label"
     },
     {
       "type": "header",
-      "content": "t:content.padding"
+      "content": "t:sections.all.padding.section_padding_heading"
     },
     {
       "type": "range",
-      "id": "padding-block-start",
-      "label": "t:settings.top",
+      "id": "padding_top",
       "min": 0,
       "max": 100,
-      "step": 1,
+      "step": 4,
       "unit": "px",
-      "default": 0
+      "label": "t:sections.all.padding.padding_top",
+      "default": 36
     },
     {
       "type": "range",
-      "id": "padding-block-end",
-      "label": "t:settings.bottom",
+      "id": "padding_bottom",
       "min": 0,
       "max": 100,
-      "step": 1,
+      "step": 4,
       "unit": "px",
-      "default": 0
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 36
     }
   ]
 }

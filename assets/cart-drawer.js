@@ -1,131 +1,136 @@
-import { DialogComponent, DialogOpenEvent, DialogCloseEvent } from '@theme/dialog';
-import { CartAddEvent } from '@theme/events';
-import { isMobileBreakpoint } from '@theme/utilities';
+class CartDrawer extends HTMLElement {
+  constructor() {
+    super();
 
-/**
- * A custom element that manages a cart drawer.
- *
- * @typedef {object} Refs
- * @property {HTMLDialogElement} dialog - The dialog element.
- * @property {HTMLElement} [liveRegion] - The live region for cart announcements when dialog is open.
- *
- * @extends {DialogComponent}
- */
-class CartDrawerComponent extends DialogComponent {
-  /** @type {number} */
-  #summaryThreshold = 0.5;
-
-  /** @type {AbortController | null} */
-  #historyAbortController = null;
-
-  connectedCallback() {
-    super.connectedCallback();
-    document.addEventListener(CartAddEvent.eventName, this.#handleCartAdd);
-    this.addEventListener(DialogOpenEvent.eventName, this.#updateStickyState);
-    this.addEventListener(DialogOpenEvent.eventName, this.#handleHistoryOpen);
-    this.addEventListener(DialogCloseEvent.eventName, this.#handleHistoryClose);
-
-    if (history.state?.cartDrawerOpen) {
-      history.replaceState(null, '');
-    }
+    this.addEventListener('keyup', (evt) => evt.code === 'Escape' && this.close());
+    this.querySelector('#CartDrawer-Overlay').addEventListener('click', this.close.bind(this));
+    this.setHeaderCartIconAccessibility();
   }
 
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    document.removeEventListener(CartAddEvent.eventName, this.#handleCartAdd);
-    this.removeEventListener(DialogOpenEvent.eventName, this.#updateStickyState);
-    this.removeEventListener(DialogOpenEvent.eventName, this.#handleHistoryOpen);
-    this.removeEventListener(DialogCloseEvent.eventName, this.#handleHistoryClose);
-    this.#historyAbortController?.abort();
-  }
+  setHeaderCartIconAccessibility() {
+    const cartLink = document.querySelector('#cart-icon-bubble');
+    if (!cartLink) return;
 
-  #handleHistoryOpen = () => {
-    if (!isMobileBreakpoint()) return;
-
-    if (!history.state?.cartDrawerOpen) {
-      history.pushState({ cartDrawerOpen: true }, '');
-    }
-
-    this.#historyAbortController = new AbortController();
-    window.addEventListener('popstate', this.#handlePopState, { signal: this.#historyAbortController.signal });
-  };
-
-  #handleHistoryClose = () => {
-    this.#historyAbortController?.abort();
-    if (history.state?.cartDrawerOpen) {
-      history.back();
-    }
-  };
-
-  #handlePopState = async () => {
-    if (this.refs.dialog?.open) {
-      this.refs.dialog.style.setProperty('--dialog-drawer-closing-animation', 'none');
-      await this.closeDialog();
-      this.refs.dialog.style.removeProperty('--dialog-drawer-closing-animation');
-    }
-  };
-
-  /**
-   * Handles cart add events - opens drawer if auto-open and announces count when open.
-   * @param {CustomEvent<{ resource?: { item_count?: number } }>} event
-   */
-  #handleCartAdd = (event) => {
-    if (this.hasAttribute('auto-open')) {
-      this.showDialog();
-    }
-
-    this.#announceCartCount(event.detail.resource?.item_count);
-  };
-
-  /**
-   * Announces cart count to screen readers when dialog is open.
-   * @param {number | undefined} cartCount
-   */
-  #announceCartCount(cartCount) {
-    const liveRegion = /** @type {HTMLElement | undefined} */ (this.refs.liveRegion);
-    if (!this.refs.dialog?.open || !liveRegion || cartCount === undefined) return;
-
-    liveRegion.textContent = `${Theme.translations.cart_count}: ${cartCount}`;
-  }
-
-  open() {
-    this.showDialog();
-
-    /**
-     * Close cart drawer when installments CTA is clicked to avoid overlapping dialogs
-     */
-    customElements.whenDefined('shopify-payment-terms').then(() => {
-      const installmentsContent = document.querySelector('shopify-payment-terms')?.shadowRoot;
-      const cta = installmentsContent?.querySelector('#shopify-installments-cta');
-      cta?.addEventListener('click', this.closeDialog, { once: true });
+    cartLink.setAttribute('role', 'button');
+    cartLink.setAttribute('aria-haspopup', 'dialog');
+    cartLink.addEventListener('click', (event) => {
+      event.preventDefault();
+      this.open(cartLink);
+    });
+    cartLink.addEventListener('keydown', (event) => {
+      if (event.code.toUpperCase() === 'SPACE') {
+        event.preventDefault();
+        this.open(cartLink);
+      }
     });
   }
 
-  close() {
-    this.closeDialog();
+  open(triggeredBy) {
+    if (triggeredBy) this.setActiveElement(triggeredBy);
+    const cartDrawerNote = this.querySelector('[id^="Details-"] summary');
+    if (cartDrawerNote && !cartDrawerNote.hasAttribute('role')) this.setSummaryAccessibility(cartDrawerNote);
+    // here the animation doesn't seem to always get triggered. A timeout seem to help
+    setTimeout(() => {
+      this.classList.add('animate', 'active');
+    });
+
+    this.addEventListener(
+      'transitionend',
+      () => {
+        const containerToTrapFocusOn = this.classList.contains('is-empty')
+          ? this.querySelector('.drawer__inner-empty')
+          : document.getElementById('CartDrawer');
+        const focusElement = this.querySelector('.drawer__inner') || this.querySelector('.drawer__close');
+        trapFocus(containerToTrapFocusOn, focusElement);
+      },
+      { once: true }
+    );
+
+    document.body.classList.add('overflow-hidden');
   }
 
-  #updateStickyState() {
-    const { dialog } = /** @type {Refs} */ (this.refs);
-    if (!dialog) return;
+  close() {
+    this.classList.remove('active');
+    removeTrapFocus(this.activeElement);
+    document.body.classList.remove('overflow-hidden');
+  }
 
-    // Refs do not cross nested `*-component` boundaries (e.g., `cart-items-component`), so we query within the dialog.
-    const content = dialog.querySelector('.cart-drawer__content');
-    const summary = dialog.querySelector('.cart-drawer__summary');
+  setSummaryAccessibility(cartDrawerNote) {
+    cartDrawerNote.setAttribute('role', 'button');
+    cartDrawerNote.setAttribute('aria-expanded', 'false');
 
-    if (!content || !summary) {
-      // Ensure the dialog doesn't get stuck in "unsticky" mode when summary disappears (e.g., empty cart).
-      dialog.setAttribute('cart-summary-sticky', 'false');
-      return;
+    if (cartDrawerNote.nextElementSibling.getAttribute('id')) {
+      cartDrawerNote.setAttribute('aria-controls', cartDrawerNote.nextElementSibling.id);
     }
 
-    const drawerHeight = dialog.getBoundingClientRect().height;
-    const summaryHeight = summary.getBoundingClientRect().height;
-    const ratio = summaryHeight / drawerHeight;
-    dialog.setAttribute('cart-summary-sticky', ratio > this.#summaryThreshold ? 'false' : 'true');
+    cartDrawerNote.addEventListener('click', (event) => {
+      event.currentTarget.setAttribute('aria-expanded', !event.currentTarget.closest('details').hasAttribute('open'));
+    });
+
+    cartDrawerNote.parentElement.addEventListener('keyup', onKeyUpEscape);
+  }
+
+  renderContents(parsedState) {
+    this.querySelector('.drawer__inner').classList.contains('is-empty') &&
+      this.querySelector('.drawer__inner').classList.remove('is-empty');
+    this.productId = parsedState.id;
+    this.getSectionsToRender().forEach((section) => {
+      const sectionElement = section.selector
+        ? document.querySelector(section.selector)
+        : document.getElementById(section.id);
+
+      if (!sectionElement) return;
+      sectionElement.innerHTML = this.getSectionInnerHTML(parsedState.sections[section.id], section.selector);
+    });
+
+    setTimeout(() => {
+      this.querySelector('#CartDrawer-Overlay').addEventListener('click', this.close.bind(this));
+      this.open();
+    });
+  }
+
+  getSectionInnerHTML(html, selector = '.shopify-section') {
+    return new DOMParser().parseFromString(html, 'text/html').querySelector(selector).innerHTML;
+  }
+
+  getSectionsToRender() {
+    return [
+      {
+        id: 'cart-drawer',
+        selector: '#CartDrawer',
+      },
+      {
+        id: 'cart-icon-bubble',
+      },
+    ];
+  }
+
+  getSectionDOM(html, selector = '.shopify-section') {
+    return new DOMParser().parseFromString(html, 'text/html').querySelector(selector);
+  }
+
+  setActiveElement(element) {
+    this.activeElement = element;
   }
 }
 
-if (!customElements.get('cart-drawer-component')) {
-  customElements.define('cart-drawer-component', CartDrawerComponent);
+customElements.define('cart-drawer', CartDrawer);
+
+class CartDrawerItems extends CartItems {
+  getSectionsToRender() {
+    return [
+      {
+        id: 'CartDrawer',
+        section: 'cart-drawer',
+        selector: '.drawer__inner',
+      },
+      {
+        id: 'cart-icon-bubble',
+        section: 'cart-icon-bubble',
+        selector: '.shopify-section',
+      },
+    ];
+  }
 }
+
+customElements.define('cart-drawer-items', CartDrawerItems);

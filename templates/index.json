@@ -1,116 +1,210 @@
 {
   "sections": {
-    "hero": {
-      "type": "ebook-hero-premium",
-      "settings": {
-        "title": "Descubre Historias que Transforman",
-        "subtitle": "Millones de lectores encuentran sus próximas lecturas favoritas aquí",
-        "show_search": true,
-        "categories_badge": true,
-        "cta_text": "Explorar Catálogo",
-        "cta_link": "#catalog"
-      }
-    },
-    "categories": {
-      "type": "ebook-categories-filter",
-      "settings": {
-        "title": "Busca por Género",
-        "show_count": true,
-        "categories": [
-          {
-            "name": "Romance",
-            "emoji": "💕",
-            "count": 2841
-          },
-          {
-            "name": "Thriller",
-            "emoji": "🔥",
-            "count": 1956
-          },
-          {
-            "name": "Drama",
-            "emoji": "🎭",
-            "count": 1542
-          },
-          {
-            "name": "Ciencia Ficción",
-            "emoji": "🚀",
-            "count": 1203
-          },
-          {
-            "name": "Fantasía",
-            "emoji": "⚔️",
-            "count": 1687
-          },
-          {
-            "name": "Misterio",
-            "emoji": "🔍",
-            "count": 1124
-          },
-          {
-            "name": "Desarrollo Personal",
-            "emoji": "📈",
-            "count": 892
-          },
-          {
-            "name": "Humor",
-            "emoji": "😂",
-            "count": 756
+    "image_banner": {
+      "type": "image-banner",
+      "blocks": {
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "heading": "Image banner",
+            "heading_size": "h0"
           }
-        ]
+        },
+        "text": {
+          "type": "text",
+          "settings": {
+            "text": "Give customers details about the banner image(s) or content on the template.",
+            "text_style": "body"
+          }
+        },
+        "button": {
+          "type": "buttons",
+          "settings": {
+            "button_label_1": "Shop all",
+            "button_link_1": "shopify://collections/all",
+            "button_style_secondary_1": true,
+            "button_label_2": "",
+            "button_link_2": "",
+            "button_style_secondary_2": false
+          }
+        }
+      },
+      "block_order": [
+        "heading",
+        "text",
+        "button"
+      ],
+      "settings": {
+        "image_overlay_opacity": 40,
+        "image_height": "large",
+        "desktop_content_position": "bottom-center",
+        "show_text_box": false,
+        "desktop_content_alignment": "center",
+        "color_scheme": "scheme-3",
+        "mobile_content_alignment": "center",
+        "stack_images_on_mobile": false,
+        "show_text_below": false
       }
     },
-    "trending": {
-      "type": "ebook-trending",
+    "rich_text": {
+      "type": "rich-text",
+      "blocks": {
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "heading": "Talk about your brand",
+            "heading_size": "h1"
+          }
+        },
+        "text": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Share information about your brand with your customers. Describe a product, make announcements, or welcome customers to your store.<\/p>"
+          }
+        }
+      },
+      "block_order": [
+        "heading",
+        "text"
+      ],
       "settings": {
-        "title": "Trending Ahora",
-        "subtitle": "Historias que todos están leyendo esta semana",
-        "show_rating": true,
-        "show_author": true,
-        "items_to_show": 5
+        "color_scheme": "scheme-1",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 0
       }
     },
-    "catalog": {
-      "type": "ebook-catalog-grid",
+    "featured_collection": {
+      "type": "featured-collection",
       "settings": {
-        "title": "Catálogo Completo",
-        "subtitle": "Explora nuestras +8000 historias",
-        "show_filters": true,
-        "show_search": true,
+        "title": "Featured products",
+        "heading_size": "h2",
+        "collection": "all",
+        "products_to_show": 8,
+        "columns_desktop": 4,
+        "color_scheme": "scheme-1",
+        "show_view_all": false,
+        "swipe_on_mobile": false,
+        "image_ratio": "adapt",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_rating": false,
+        "columns_mobile": "2",
+        "padding_top": 28,
+        "padding_bottom": 36
+      }
+    },
+    "collage": {
+      "type": "collage",
+      "blocks": {
+        "collection-0": {
+          "type": "collection",
+          "settings": {
+            "collection": ""
+          }
+        },
+        "product": {
+          "type": "product",
+          "settings": {
+            "product": "",
+            "second_image": false
+          }
+        },
+        "collection-1": {
+          "type": "collection",
+          "settings": {
+            "collection": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection-0",
+        "product",
+        "collection-1"
+      ],
+      "settings": {
+        "heading": "Multimedia collage",
+        "heading_size": "h2",
+        "desktop_layout": "left",
+        "mobile_layout": "collage",
+        "color_scheme": "scheme-1",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "video": {
+      "type": "video",
+      "settings": {
+        "heading": "",
+        "video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+        "heading_size": "h1",
+        "description": "",
+        "full_width": false,
+        "color_scheme": "scheme-1",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "multicolumn": {
+      "type": "multicolumn",
+      "blocks": {
+        "column1": {
+          "type": "column",
+          "settings": {
+            "title": "Column",
+            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.<\/p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column2": {
+          "type": "column",
+          "settings": {
+            "title": "Column",
+            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.<\/p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column3": {
+          "type": "column",
+          "settings": {
+            "title": "Column",
+            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.<\/p>",
+            "link_label": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "column1",
+        "column2",
+        "column3"
+      ],
+      "settings": {
+        "title": "",
+        "heading_size": "h1",
+        "image_width": "third",
+        "image_ratio": "adapt",
         "columns_desktop": 3,
-        "columns_tablet": 2,
-        "columns_mobile": 1,
-        "items_per_page": 12,
-        "show_rating": true,
-        "show_author": true
-      }
-    },
-    "testimonials": {
-      "type": "ebook-testimonials-modern",
-      "settings": {
-        "title": "Lo Que Dicen Nuestros Lectores",
-        "subtitle": "Historias reales de personas que encontraron su próxima obsesión literaria",
-        "show_rating": true,
-        "background_color": "light"
-      }
-    },
-    "authors": {
-      "type": "ebook-author-spotlight",
-      "settings": {
-        "title": "Autores Destacados",
-        "subtitle": "Descubre a los creadores de tus historias favoritas",
-        "show_bio": true,
-        "show_work_count": true,
-        "cta_text": "Ver Todas las Obras"
+        "column_alignment": "center",
+        "background_style": "none",
+        "button_label": "",
+        "button_link": "",
+        "swipe_on_mobile": false,
+        "color_scheme": "scheme-1",
+        "columns_mobile": "1",
+        "padding_top": 36,
+        "padding_bottom": 36
       }
     }
   },
   "order": [
-    "hero",
-    "categories",
-    "trending",
-    "catalog",
-    "testimonials",
-    "authors"
+    "image_banner",
+    "rich_text",
+    "featured_collection",
+    "collage",
+    "video",
+    "multicolumn"
   ]
 }

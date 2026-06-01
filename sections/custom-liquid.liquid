@@ -1,74 +1,68 @@
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: calc({{ section.settings.padding_top }}px * 0.75);
+    padding-bottom: calc({{ section.settings.padding_bottom }}px  * 0.75);
+  }
 
-
-<div class="section-background color-{{ section.settings.color_scheme }}"></div>
-<div
-  class="section section--{{ section.settings.section_width }} spacing-style {% if section.settings.color_scheme != blank %}color-{{ section.settings.color_scheme }}{% endif %}"
-  style="{% render 'spacing-padding', settings: section.settings %}"
->
-  {{ section.settings.custom_liquid }}
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+<div class="color-{{ section.settings.color_scheme }} gradient">
+  <div class="section-{{ section.id }}-padding">
+    {{ section.settings.custom_liquid }}
+  </div>
 </div>
 
 {% schema %}
 {
-  "name": "t:names.custom_liquid",
+  "name": "t:sections.custom-liquid.name",
+  "tag": "section",
+  "class": "section",
   "settings": [
     {
       "type": "liquid",
       "id": "custom_liquid",
-      "label": "t:settings.custom_liquid",
-      "info": "t:info.custom_liquid"
+      "label": "t:sections.custom-liquid.settings.custom_liquid.label",
+      "info": "t:sections.custom-liquid.settings.custom_liquid.info"
     },
     {
       "type": "color_scheme",
       "id": "color_scheme",
-      "label": "t:settings.color_scheme",
+      "label": "t:sections.all.colors.label",
       "default": "scheme-1"
     },
     {
-      "type": "select",
-      "id": "section_width",
-      "label": "t:settings.width",
-      "options": [
-        {
-          "value": "page-width",
-          "label": "t:options.page"
-        },
-        {
-          "value": "full-width",
-          "label": "t:options.full"
-        }
-      ],
-      "default": "page-width"
-    },
-    {
       "type": "header",
-      "content": "t:content.padding"
+      "content": "t:sections.all.padding.section_padding_heading"
     },
     {
       "type": "range",
-      "id": "padding-block-start",
-      "label": "t:settings.top",
+      "id": "padding_top",
       "min": 0,
       "max": 100,
-      "step": 1,
+      "step": 4,
       "unit": "px",
-      "default": 0
+      "label": "t:sections.all.padding.padding_top",
+      "default": 40
     },
     {
       "type": "range",
-      "id": "padding-block-end",
-      "label": "t:settings.bottom",
+      "id": "padding_bottom",
       "min": 0,
       "max": 100,
-      "step": 1,
+      "step": 4,
       "unit": "px",
-      "default": 0
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 52
     }
   ],
   "presets": [
     {
-      "name": "t:names.custom_liquid",
-      "category": "t:categories.layout"
+      "name": "t:sections.custom-liquid.presets.name"
     }
   ]
 }

@@ -1,134 +1,103 @@
-import { Component } from '@theme/component';
-import { ThemeEvents } from '@theme/events';
+if (!customElements.get('price-per-item')) {
+  customElements.define(
+    'price-per-item',
+    class PricePerItem extends HTMLElement {
+      constructor() {
+        super();
+        this.variantId = this.dataset.variantId;
+        this.input = document.getElementById(`Quantity-${this.dataset.sectionId || this.dataset.variantId}`);
+        if (this.input) {
+          this.input.addEventListener('change', this.onInputChange.bind(this));
+        }
 
-/**
- * Displays dynamic per-item pricing based on quantity and volume pricing tiers.
- * Updates automatically when quantity changes or cart is updated.
- *
- * @typedef {Object} PriceBreak
- * @property {number} quantity - Minimum quantity for this price tier
- * @property {string} price - Formatted price string (e.g., "$9.50 USD")
- *
- * @typedef {Object} PricePerItemRefs
- * @property {HTMLElement} [pricePerItemText] - The text element displaying the price
- *
- * @extends {Component<PricePerItemRefs>}
- */
-class PricePerItemComponent extends Component {
-  /** @type {PriceBreak[]} */
-  #priceBreaks = [];
-  #abortController = new AbortController();
+        this.getVolumePricingArray();
+      }
 
-  connectedCallback() {
-    super.connectedCallback();
-    this.#parsePriceBreaks();
-    this.#attachEventListeners();
-    this.#updatePriceDisplay();
-  }
+      updatePricePerItemUnsubscriber = undefined;
+      variantIdChangedUnsubscriber = undefined;
 
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    this.#abortController.abort();
-  }
+      connectedCallback() {
+        // Update variantId if variant is switched on product page
+        this.variantIdChangedUnsubscriber = subscribe(PUB_SUB_EVENTS.variantChange, (event) => {
+          this.variantId = event.data.variant.id.toString();
+          this.getVolumePricingArray();
+        });
 
-  /**
-   * Parses price breaks from data attributes
-   */
-  #parsePriceBreaks() {
-    const minQuantity = parseInt(this.dataset.minQuantity || '') || 1;
-    const { variantPrice, priceBreaks: priceBreaksData } = this.dataset;
+        this.updatePricePerItemUnsubscriber = subscribe(PUB_SUB_EVENTS.cartUpdate, (response) => {
+          if (!response.cartData) return;
 
-    // Start with base price tier
-    if (variantPrice) {
-      this.#priceBreaks.push({ quantity: minQuantity, price: variantPrice });
-    }
+          // Item was added to cart via product page
+          if (response.cartData['variant_id'] !== undefined) {
+            if (response.productVariantId === this.variantId) this.updatePricePerItem(response.cartData.quantity);
+            // Qty was updated in cart
+          } else if (response.cartData.item_count !== 0) {
+            const isVariant = response.cartData.items.find((item) => item.variant_id.toString() === this.variantId);
+            if (isVariant && isVariant.id.toString() === this.variantId) {
+              // The variant is still in cart
+              this.updatePricePerItem(isVariant.quantity);
+            } else {
+              // The variant was removed from cart, qty is 0
+              this.updatePricePerItem(0);
+            }
+            // All items were removed from cart
+          } else {
+            this.updatePricePerItem(0);
+          }
+        });
+      }
 
-    // Parse additional price breaks from JSON array
-    if (priceBreaksData) {
-      const breaks = JSON.parse(priceBreaksData);
-      for (const { quantity, price } of breaks) {
-        if (quantity && price) {
-          this.#priceBreaks.push({ quantity: parseInt(quantity), price });
+      disconnectedCallback() {
+        if (this.updatePricePerItemUnsubscriber) {
+          this.updatePricePerItemUnsubscriber();
+        }
+        if (this.variantIdChangedUnsubscriber) {
+          this.variantIdChangedUnsubscriber();
         }
       }
+
+      onInputChange() {
+        this.updatePricePerItem();
+      }
+
+      updatePricePerItem(updatedCartQuantity) {
+        if (this.input) {
+          this.enteredQty = parseInt(this.input.value);
+          this.step = parseInt(this.input.step)
+        }
+
+        // updatedCartQuantity is undefined when qty is updated on product page. We need to sum entered qty and current qty in cart.
+        // updatedCartQuantity is not undefined when qty is updated in cart. We need to sum qty in cart and min qty for product.
+        this.currentQtyForVolumePricing = updatedCartQuantity === undefined ? this.getCartQuantity(updatedCartQuantity) + this.enteredQty : this.getCartQuantity(updatedCartQuantity) + parseInt(this.step);
+
+        if (this.classList.contains('variant-item__price-per-item')) {
+          this.currentQtyForVolumePricing = this.getCartQuantity(updatedCartQuantity);
+        }
+        for (let pair of this.qtyPricePairs) {
+          if (this.currentQtyForVolumePricing >= pair[0]) {
+            const pricePerItemCurrent = document.querySelector(`price-per-item[id^="Price-Per-Item-${this.dataset.sectionId || this.dataset.variantId}"] .price-per-item span`);
+            this.classList.contains('variant-item__price-per-item') ? pricePerItemCurrent.innerHTML = window.quickOrderListStrings.each.replace('[money]', pair[1]) : pricePerItemCurrent.innerHTML = pair[1];
+            break;
+          }
+        }
+      }
+
+      getCartQuantity(updatedCartQuantity) {
+        return (updatedCartQuantity || updatedCartQuantity === 0) ? updatedCartQuantity : parseInt(this.input.dataset.cartQuantity);
+      }
+
+      getVolumePricingArray() {
+        const volumePricing = document.getElementById(`Volume-${this.dataset.sectionId || this.dataset.variantId}`);
+        this.qtyPricePairs = [];
+
+        if (volumePricing) {
+          volumePricing.querySelectorAll('li').forEach(li => {
+            const qty = parseInt(li.querySelector('span:first-child').textContent);
+            const price = (li.querySelector('span:not(:first-child):last-child').dataset.text);
+            this.qtyPricePairs.push([qty, price]);
+          });
+        }
+        this.qtyPricePairs.reverse();
+      }
     }
-
-    // Sort by quantity descending for efficient lookup
-    this.#priceBreaks.sort((a, b) => b.quantity - a.quantity);
-  }
-
-  /**
-   * Attaches event listeners for quantity and cart updates
-   */
-  #attachEventListeners() {
-    const { signal } = this.#abortController;
-
-    // Listen on document to catch all events (more reliable than form-only)
-    document.addEventListener(ThemeEvents.quantitySelectorUpdate, this.#handleQuantityUpdate, { signal });
-    document.addEventListener(ThemeEvents.cartUpdate, this.#handleCartUpdate, { signal });
-  }
-
-  /**
-   * Handles quantity selector updates
-   * @param {Event} event
-   */
-  #handleQuantityUpdate = (event) => {
-    // Only respond to updates for our variant's quantity selector
-    const form = this.closest('product-form-component');
-    if (!form || !(event.target instanceof Node) || !form.contains(event.target)) return;
-
-    this.#updatePriceDisplay();
-  };
-
-  /**
-   * Handles cart updates by refreshing display
-   */
-  #handleCartUpdate = () => {
-    this.#updatePriceDisplay();
-  };
-
-  /**
-   * Gets the total quantity (cart + current input value)
-   * @returns {number}
-   */
-  #getCurrentQuantity() {
-    const form = this.closest('product-form-component');
-    const quantityInput = /** @type {HTMLInputElement | null} */ (form?.querySelector('input[name="quantity"]'));
-    if (!quantityInput) return 1;
-
-    // Read the current cart quantity from the data attribute
-    const cartQty = parseInt(quantityInput.getAttribute('data-cart-quantity') || '0') || 0;
-    // Read the current input value (quantity to add)
-    const inputQty = parseInt(quantityInput.value) || 1;
-
-    return cartQty + inputQty;
-  }
-
-  /**
-   * Updates the price display based on current quantity
-   */
-  updatePriceDisplay() {
-    if (!this.#priceBreaks.length || !this.refs.pricePerItemText) return;
-
-    const quantity = this.#getCurrentQuantity();
-
-    // Price breaks are sorted descending, find first tier that quantity qualifies for
-    const priceBreak =
-      this.#priceBreaks.find((pb) => quantity >= pb.quantity) ?? this.#priceBreaks[this.#priceBreaks.length - 1];
-
-    if (priceBreak) {
-      this.refs.pricePerItemText.innerHTML = `${this.dataset.atText} ${priceBreak.price}/${this.dataset.eachText}`;
-    }
-  }
-
-  /**
-   * Private wrapper for event handlers
-   */
-  #updatePriceDisplay = () => {
-    this.updatePriceDisplay();
-  };
-}
-
-if (!customElements.get('price-per-item')) {
-  customElements.define('price-per-item', PricePerItemComponent);
+  );
 }
