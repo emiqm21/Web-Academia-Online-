@@ -67,49 +67,49 @@
             "type": "color",
             "id": "background",
             "label": "t:settings.background",
-            "default": "#FFFFFF",
+            "default": "#FAFAF8",
             "alpha": true
           },
           {
             "type": "color",
             "id": "foreground_heading",
             "label": "t:settings.headings",
-            "default": "#000000",
+            "default": "#5A1D4E",
             "alpha": true
           },
           {
             "type": "color",
             "id": "foreground",
             "label": "t:settings.text",
-            "default": "#000000",
+            "default": "#2C2C2C",
             "alpha": true
           },
           {
             "type": "color",
             "id": "primary",
             "label": "t:settings.primary_color",
-            "default": "#000F9F",
+            "default": "#7B2869",
             "alpha": true
           },
           {
             "type": "color",
             "id": "primary_hover",
             "label": "t:settings.primary_hover_color",
-            "default": "#000000",
+            "default": "#5A1D4E",
             "alpha": true
           },
           {
             "type": "color",
             "id": "border",
             "label": "t:settings.borders",
-            "default": "#E6E6E6",
+            "default": "#E8D5E0",
             "alpha": true
           },
           {
             "type": "color",
             "id": "shadow",
             "label": "t:settings.shadow_color",
-            "default": "#000000",
+            "default": "#5A1D4E",
             "alpha": true
           },
           {
@@ -120,7 +120,7 @@
             "type": "color",
             "id": "primary_button_background",
             "label": "t:settings.background",
-            "default": "#000F9F",
+            "default": "#7B2869",
             "alpha": true
           },
           {
@@ -134,14 +134,14 @@
             "type": "color",
             "id": "primary_button_border",
             "label": "t:settings.borders",
-            "default": "#000F9F",
+            "default": "#D4AF37",
             "alpha": true
           },
           {
             "type": "color",
             "id": "primary_button_hover_background",
             "label": "t:settings.hover_background",
-            "default": "#000F9F",
+            "default": "#5A1D4E",
             "alpha": true
           },
           {
@@ -155,7 +155,7 @@
             "type": "color",
             "id": "primary_button_hover_border",
             "label": "t:settings.hover_borders",
-            "default": "#000F9F",
+            "default": "#D4AF37",
             "alpha": true
           },
           {
@@ -290,7 +290,7 @@
             "type": "color",
             "id": "selected_variant_background_color",
             "label": "t:settings.background",
-            "default": "#000000",
+            "default": "#7B2869",
             "alpha": true
           },
           {
@@ -304,14 +304,14 @@
             "type": "color",
             "id": "selected_variant_border_color",
             "label": "t:settings.borders",
-            "default": "#000000",
+            "default": "#D4AF37",
             "alpha": true
           },
           {
             "type": "color",
             "id": "selected_variant_hover_background_color",
             "label": "t:settings.hover_background",
-            "default": "#1A1A1A",
+            "default": "#5A1D4E",
             "alpha": true
           },
           {
@@ -325,7 +325,7 @@
             "type": "color",
             "id": "selected_variant_hover_border_color",
             "label": "t:settings.hover_borders",
-            "default": "#1A1A1A",
+            "default": "#D4AF37",
             "alpha": true
           }
         ],

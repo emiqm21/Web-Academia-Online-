@@ -1,0 +1,290 @@
+/* Premium Typography & Design Enhancements for Academia Online Pro */
+
+:root {
+  /* Premium Font Stack */
+  --font-heading-primary: 'Playfair Display', serif;
+  --font-accent: 'Cormorant Garamond', serif;
+  --font-body: 'Inter', sans-serif;
+  
+  /* Enhanced Spacing */
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 1.5rem;
+  --spacing-lg: 2rem;
+  --spacing-xl: 3rem;
+  --spacing-2xl: 4rem;
+  
+  /* Premium Shadows */
+  --shadow-sm: 0 1px 2px rgba(90, 29, 78, 0.08);
+  --shadow-md: 0 4px 12px rgba(90, 29, 78, 0.12);
+  --shadow-lg: 0 12px 28px rgba(90, 29, 78, 0.16);
+  --shadow-xl: 0 20px 40px rgba(90, 29, 78, 0.18);
+  
+  /* Gradients */
+  --gradient-premium: linear-gradient(135deg, #7B2869 0%, #5A1D4E 100%);
+  --gradient-gold: linear-gradient(135deg, #D4AF37 0%, #C4941F 100%);
+  
+  /* Border Radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 20px;
+}
+
+/* Apply Premium Typography */
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: var(--font-heading-premium, var(--font-heading-primary));
+  font-weight: 600;
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+}
+
+h1, .h1 {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 700;
+  letter-spacing: -1px;
+}
+
+h2, .h2 {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 600;
+}
+
+h3, .h3 {
+  font-size: clamp(1.5rem, 3.5vw, 1.875rem);
+  font-weight: 600;
+}
+
+body,
+p,
+.paragraph,
+.text-body {
+  font-family: var(--font-body-premium, var(--font-body));
+  font-weight: 400;
+  letter-spacing: 0.3px;
+  line-height: 1.6;
+  color: var(--color-foreground);
+}
+
+/* Premium Button Styles */
+button,
+.button,
+[type="button"],
+[type="submit"] {
+  font-family: var(--font-body-premium);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: none;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+
+/* Primary Button Enhancement */
+.button--primary,
+button.primary {
+  background: var(--gradient-premium);
+  border: 2px solid transparent;
+  color: #FFFFFF;
+  padding: 14px 32px;
+  border-radius: var(--radius-lg);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  box-shadow: var(--shadow-lg);
+  position: relative;
+}
+
+.button--primary:hover,
+button.primary:hover {
+  background: linear-gradient(135deg, #5A1D4E 0%, #4A1540 100%);
+  box-shadow: var(--shadow-xl);
+  transform: translateY(-2px);
+}
+
+.button--primary:active,
+button.primary:active {
+  transform: translateY(0);
+}
+
+/* Secondary Button Enhancement */
+.button--secondary,
+button.secondary {
+  background: transparent;
+  border: 2px solid #D4AF37;
+  color: #7B2869;
+  padding: 12px 30px;
+  border-radius: var(--radius-lg);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+}
+
+.button--secondary:hover,
+button.secondary:hover {
+  background: rgba(212, 175, 55, 0.1);
+  border-color: #D4AF37;
+  color: #5A1D4E;
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+/* Card Enhancement */
+.card,
+.product-card,
+.collection-card,
+[class*="--card"] {
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+  border: 1px solid rgba(232, 213, 224, 0.6);
+  background: rgba(250, 250, 248, 0.8);
+  backdrop-filter: blur(4px);
+}
+
+.card:hover,
+.product-card:hover,
+.collection-card:hover {
+  box-shadow: var(--shadow-lg);
+  border-color: rgba(212, 175, 55, 0.4);
+  transform: translateY(-4px);
+}
+
+/* Section Spacing Premium */
+section,
+.section {
+  padding-top: var(--spacing-xl);
+  padding-bottom: var(--spacing-xl);
+}
+
+@media (min-width: 768px) {
+  section,
+  .section {
+    padding-top: var(--spacing-2xl);
+    padding-bottom: var(--spacing-2xl);
+  }
+}
+
+/* Input Enhancement */
+input,
+textarea,
+select {
+  border-radius: var(--radius-md);
+  border: 1px solid #E8D5E0;
+  font-family: var(--font-body-premium);
+  padding: 12px 16px;
+  transition: all 0.3s ease;
+  background-color: rgba(250, 250, 248, 0.9);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: #7B2869;
+  box-shadow: 0 0 0 3px rgba(123, 40, 105, 0.1);
+  outline: none;
+}
+
+/* Link Enhancement */
+a {
+  color: #7B2869;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+a:hover {
+  color: #D4AF37;
+}
+
+a::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -2px;
+  left: 0;
+  background: linear-gradient(90deg, #D4AF37, transparent);
+  transition: width 0.3s ease;
+}
+
+a:hover::after {
+  width: 100%;
+}
+
+/* Divider Enhancement */
+hr,
+.divider {
+  border: none;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #E8D5E0, transparent);
+  margin: var(--spacing-lg) 0;
+}
+
+/* Quote/Testimonial Styling */
+blockquote,
+.quote {
+  font-family: var(--font-accent);
+  font-size: 1.25rem;
+  font-style: italic;
+  border-left: 4px solid #D4AF37;
+  padding-left: var(--spacing-lg);
+  margin: var(--spacing-lg) 0;
+  color: #5A1D4E;
+  line-height: 1.8;
+}
+
+/* Heading Accent Style */
+.heading-accent,
+.title-premium {
+  position: relative;
+  display: inline-block;
+}
+
+.heading-accent::after,
+.title-premium::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 60%;
+  height: 3px;
+  background: var(--gradient-gold);
+  border-radius: 2px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  h1, .h1 {
+    font-size: 2rem;
+  }
+  
+  h2, .h2 {
+    font-size: 1.5rem;
+  }
+  
+  section,
+  .section {
+    padding-top: var(--spacing-lg);
+    padding-bottom: var(--spacing-lg);
+  }
+}
+
+/* Accessibility Improvements */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Print Styles */
+@media print {
+  a {
+    text-decoration: underline;
+  }
+}
