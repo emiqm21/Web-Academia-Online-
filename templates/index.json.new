@@ -1,0 +1,116 @@
+{
+  "sections": {
+    "hero": {
+      "type": "ebook-hero-premium",
+      "settings": {
+        "title": "Descubre Historias que Transforman",
+        "subtitle": "Millones de lectores encuentran sus próximas lecturas favoritas aquí",
+        "show_search": true,
+        "categories_badge": true,
+        "cta_text": "Explorar Catálogo",
+        "cta_link": "#catalog"
+      }
+    },
+    "categories": {
+      "type": "ebook-categories-filter",
+      "settings": {
+        "title": "Busca por Género",
+        "show_count": true,
+        "categories": [
+          {
+            "name": "Romance",
+            "emoji": "💕",
+            "count": 2841
+          },
+          {
+            "name": "Thriller",
+            "emoji": "🔥",
+            "count": 1956
+          },
+          {
+            "name": "Drama",
+            "emoji": "🎭",
+            "count": 1542
+          },
+          {
+            "name": "Ciencia Ficción",
+            "emoji": "🚀",
+            "count": 1203
+          },
+          {
+            "name": "Fantasía",
+            "emoji": "⚔️",
+            "count": 1687
+          },
+          {
+            "name": "Misterio",
+            "emoji": "🔍",
+            "count": 1124
+          },
+          {
+            "name": "Desarrollo Personal",
+            "emoji": "📈",
+            "count": 892
+          },
+          {
+            "name": "Humor",
+            "emoji": "😂",
+            "count": 756
+          }
+        ]
+      }
+    },
+    "trending": {
+      "type": "ebook-trending",
+      "settings": {
+        "title": "Trending Ahora",
+        "subtitle": "Historias que todos están leyendo esta semana",
+        "show_rating": true,
+        "show_author": true,
+        "items_to_show": 5
+      }
+    },
+    "catalog": {
+      "type": "ebook-catalog-grid",
+      "settings": {
+        "title": "Catálogo Completo",
+        "subtitle": "Explora nuestras +8000 historias",
+        "show_filters": true,
+        "show_search": true,
+        "columns_desktop": 3,
+        "columns_tablet": 2,
+        "columns_mobile": 1,
+        "items_per_page": 12,
+        "show_rating": true,
+        "show_author": true
+      }
+    },
+    "testimonials": {
+      "type": "ebook-testimonials-modern",
+      "settings": {
+        "title": "Lo Que Dicen Nuestros Lectores",
+        "subtitle": "Historias reales de personas que encontraron su próxima obsesión literaria",
+        "show_rating": true,
+        "background_color": "light"
+      }
+    },
+    "authors": {
+      "type": "ebook-author-spotlight",
+      "settings": {
+        "title": "Autores Destacados",
+        "subtitle": "Descubre a los creadores de tus historias favoritas",
+        "show_bio": true,
+        "show_work_count": true,
+        "cta_text": "Ver Todas las Obras"
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "categories",
+    "trending",
+    "catalog",
+    "testimonials",
+    "authors"
+  ]
+}
