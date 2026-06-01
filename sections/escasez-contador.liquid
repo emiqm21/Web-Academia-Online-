@@ -1,0 +1,409 @@
+{% assign heading = section.settings.heading %}
+{% assign copies_total = section.settings.copies_total %}
+{% assign copies_remaining = section.settings.copies_remaining %}
+{% assign original_price = section.settings.original_price %}
+{% assign launch_price = section.settings.launch_price %}
+{% assign discount_percentage = section.settings.discount_percentage %}
+{% assign days_remaining = section.settings.days_remaining %}
+
+<section class="escasez-section">
+  <div class="escasez-container">
+    <!-- Contenedor principal con dos columnas -->
+    <div class="escasez-grid">
+      <!-- Columna 1: Oferta de lanzamiento -->
+      <div class="oferta-card" data-aos="fade-up">
+        <div class="oferta-badge">
+          <span class="badge-pulse"></span>
+          OFERTA DE LANZAMIENTO
+        </div>
+
+        {% if heading %}
+          <h3 class="oferta-heading">{{ heading }}</h3>
+        {% endif %}
+
+        <!-- Precios -->
+        <div class="precios-section">
+          <div class="precio-original">
+            <span class="label">Precio regular</span>
+            <span class="amount">${{ original_price }}</span>
+          </div>
+
+          <div class="precio-descuento">
+            <span class="badge-descuento">-{{ discount_percentage }}%</span>
+            <span class="label">Precio de lanzamiento</span>
+            <span class="amount main-price">${{ launch_price }}</span>
+          </div>
+        </div>
+
+        <!-- Ahorras -->
+        {% assign ahorro = original_price | minus: launch_price %}
+        <p class="ahorro-text">
+          Ahorras <strong>${{ ahorro }}</strong> en esta edición
+        </p>
+      </div>
+
+      <!-- Columna 2: Contador de copias + Urgencia -->
+      <div class="contador-card" data-aos="fade-up" data-aos-delay="200">
+        <!-- Contador de copias -->
+        <div class="contador-box">
+          <p class="contador-label">Copias disponibles a este precio</p>
+
+          <div class="contador-visual">
+            <div class="contador-bar">
+              {% assign percentage = copies_remaining | times: 100 | divided_by: copies_total %}
+              <div class="contador-fill" style="width: {{ percentage }}%"></div>
+            </div>
+            <p class="contador-number">
+              <span class="remaining">{{ copies_remaining }}</span>
+              <span class="total">/ {{ copies_total }}</span>
+            </p>
+          </div>
+
+          <p class="contador-urgencia">
+            ⚡ Solo quedan {{ copies_remaining }} copias
+          </p>
+        </div>
+
+        <!-- Urgencia temporal -->
+        <div class="urgencia-box">
+          <p class="urgencia-label">Tiempo restante para esta promoción</p>
+          <p class="urgencia-time">
+            <span class="time-number">{{ days_remaining }}</span>
+            <span class="time-label">días</span>
+          </p>
+          <p class="urgencia-text">La promoción se cierra cuando se agoten las {{ copies_total }} copias o pasen los {{ days_remaining }} días</p>
+        </div>
+
+        <!-- Gatillo psicológico -->
+        <div class="gatillo-box">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
+          <span>No hay riesgo: garantía 30 días</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA de urgencia -->
+    <div class="cta-urgencia" data-aos="fade-up" data-aos-delay="300">
+      <p class="cta-text">No esperes a que se agoten las copias a precio de lanzamiento</p>
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .escasez-section {
+    padding: 80px 20px;
+    background: linear-gradient(135deg, #f7f1e8 0%, #fffaf3 100%);
+  }
+
+  .escasez-container {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .escasez-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 40px;
+    margin-bottom: 40px;
+  }
+
+  /* Tarjeta de Oferta */
+  .oferta-card {
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    border: 2px solid #e85f2a;
+    position: relative;
+  }
+
+  .oferta-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #e85f2a;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-bottom: 24px;
+  }
+
+  .badge-pulse {
+    width: 8px;
+    height: 8px;
+    background: white;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.6;
+      transform: scale(0.8);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .oferta-heading {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 32px;
+    color: #171719;
+  }
+
+  .precios-section {
+    margin-bottom: 24px;
+  }
+
+  .precio-original {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #ece2d5;
+  }
+
+  .precio-original .label {
+    font-size: 0.95rem;
+    color: #5c5c66;
+  }
+
+  .precio-original .amount {
+    font-size: 1.2rem;
+    color: #5c5c66;
+    text-decoration: line-through;
+  }
+
+  .precio-descuento {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 16px;
+    position: relative;
+  }
+
+  .badge-descuento {
+    background: #0f8f5f;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+
+  .precio-descuento .label {
+    font-size: 0.95rem;
+    color: #5c5c66;
+  }
+
+  .main-price {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #e85f2a;
+  }
+
+  .ahorro-text {
+    text-align: center;
+    color: #0f8f5f;
+    font-size: 0.95rem;
+    margin: 0;
+  }
+
+  /* Tarjeta de Contador */
+  .contador-card {
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    border: 1px solid #ece2d5;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .contador-box,
+  .urgencia-box,
+  .gatillo-box {
+    padding: 24px;
+    background: #fffaf3;
+    border-radius: 8px;
+  }
+
+  .contador-label,
+  .urgencia-label {
+    font-size: 0.9rem;
+    color: #5c5c66;
+    margin: 0 0 12px 0;
+    font-weight: 500;
+  }
+
+  .contador-visual {
+    margin-bottom: 12px;
+  }
+
+  .contador-bar {
+    width: 100%;
+    height: 12px;
+    background: #ece2d5;
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+
+  .contador-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #e85f2a 0%, #1aa6a6 100%);
+    transition: width 0.6s ease;
+  }
+
+  .contador-number {
+    font-size: 0.95rem;
+    color: #5c5c66;
+    margin: 0;
+  }
+
+  .remaining {
+    font-weight: 700;
+    color: #e85f2a;
+  }
+
+  .contador-urgencia {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #e85f2a;
+    margin: 0;
+  }
+
+  .urgencia-time {
+    margin: 0;
+  }
+
+  .time-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #e85f2a;
+    display: block;
+  }
+
+  .time-label {
+    font-size: 0.95rem;
+    color: #5c5c66;
+  }
+
+  .urgencia-text {
+    font-size: 0.85rem;
+    color: #5c5c66;
+    margin: 12px 0 0 0;
+    line-height: 1.4;
+  }
+
+  .gatillo-box {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(15, 143, 95, 0.1);
+    border: 1px solid rgba(15, 143, 95, 0.2);
+    color: #0f8f5f;
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+
+  .cta-urgencia {
+    text-align: center;
+    padding: 24px;
+    background: rgba(232, 95, 42, 0.1);
+    border-radius: 8px;
+    border: 1px dashed #e85f2a;
+  }
+
+  .cta-text {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #e85f2a;
+    margin: 0;
+  }
+
+  @media (max-width: 768px) {
+    .escasez-section {
+      padding: 60px 20px;
+    }
+
+    .escasez-grid {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    .oferta-card,
+    .contador-card {
+      padding: 24px;
+    }
+
+    .main-price {
+      font-size: 2rem;
+    }
+
+    .time-number {
+      font-size: 2rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Escasez - Contador",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Precio de Lanzamiento"
+    },
+    {
+      "type": "number",
+      "id": "original_price",
+      "label": "Precio Original (sin símbolo)",
+      "default": 34990
+    },
+    {
+      "type": "number",
+      "id": "launch_price",
+      "label": "Precio de Lanzamiento",
+      "default": 17495
+    },
+    {
+      "type": "number",
+      "id": "discount_percentage",
+      "label": "Porcentaje de Descuento",
+      "default": 50
+    },
+    {
+      "type": "number",
+      "id": "copies_total",
+      "label": "Total de Copias",
+      "default": 100
+    },
+    {
+      "type": "number",
+      "id": "copies_remaining",
+      "label": "Copias Restantes (ficticio)",
+      "default": 10
+    },
+    {
+      "type": "number",
+      "id": "days_remaining",
+      "label": "Días Restantes para Promoción",
+      "default": 7
+    }
+  ]
+}
+{% endschema %}
